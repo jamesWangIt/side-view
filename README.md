@@ -29,7 +29,7 @@ Add it as a marketplace in your Claude Code settings (`~/.claude/settings.json`)
     "jameswang-plugins": {
       "source": {
         "source": "git",
-        "url": "https://github.com/your-username/side-view.git"
+        "url": "https://github.com/jamesWangIt/side-view.git"
       }
     }
   },
