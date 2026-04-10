@@ -53,50 +53,40 @@ The last option should always be "Most recent response" as a fallback.
 
 ### Terminal mode (default)
 
-**Before printing, convert the markdown content to clean plain text.** Strip all markdown
-syntax and reformat for terminal readability:
+**CRITICAL: Write the selected response VERBATIM — do NOT convert, reformat, translate, or modify
+the content in any way. Copy it character-for-character, preserving the original language and all
+markdown syntax as-is.**
 
-| Markdown | Plain text |
-|----------|-----------|
-| `## Heading` | `Heading` followed by a line of `=====` |
-| `### Subheading` | `Subheading` followed by a line of `-----` |
-| `**bold text**` | `bold text` (just remove the `**`) |
-| `` `inline code` `` | `inline code` (just remove the backticks) |
-| Code blocks (triple backticks) | Indent each line with 4 spaces, no backtick fences |
-| `- list item` | `  - list item` (keep as is) |
-| `1. item` | `  1. item` (keep as is) |
-| Markdown tables | Convert to aligned columns using spaces, no `|` or `---` borders |
+**Step 2a: Write raw content to temp file**
 
-**Table conversion example:**
-
-Markdown:
-```
-| Name | Value |
-|------|-------|
-| foo  | 123   |
-| bar  | 456   |
-```
-
-Plain text:
-```
-  Name    Value
-  foo     123
-  bar     456
-```
-
-**Add a blank line between sections for readability.**
-
-Then write the converted plain text to a temp file, detect the current terminal, and open a new
-window to display it.
-
-**Step 2a: Write temp file**
-
-Use the `Write` tool to write the converted plain text content:
-- macOS / Linux: `/tmp/.claude_side_view.txt`
-- Windows: `%TEMP%\claude-side-view.txt`
+Use the `Write` tool to write the selected response content EXACTLY as it originally appeared,
+including all markdown syntax (`##`, `**`, backticks, etc.):
+- macOS / Linux: `/tmp/.claude_side_view_raw.md`
+- Windows: `%TEMP%\claude-side-view-raw.md`
 
 Do NOT use Bash heredoc — use the Write tool directly to avoid triggering shell security warnings
 from `#` characters in the content.
+
+**Step 2a2: Strip markdown formatting with sed**
+
+Run this Bash command to programmatically strip markdown syntax from the raw file:
+
+```bash
+sed -E \
+  -e 's/^#{1,6} //' \
+  -e 's/\*\*([^*]+)\*\*/\1/g' \
+  -e 's/\*([^*]+)\*/\1/g' \
+  -e 's/`([^`]+)`/\1/g' \
+  -e '/^```/d' \
+  -e 's/^\| ?//' \
+  -e 's/ ?\|$//' \
+  -e '/^[-|: ]+$/d' \
+  -e 's/ ?\| ?/    /g' \
+  /tmp/.claude_side_view_raw.md > /tmp/.claude_side_view.txt && rm -f /tmp/.claude_side_view_raw.md
+```
+
+This ensures formatting is stripped programmatically without any LLM involvement, so the
+original language and content are perfectly preserved.
 
 **Step 2b: Detect terminal**
 
@@ -224,8 +214,8 @@ After opening, confirm:
 
 ## Rules
 
-- **CRITICAL: Render the selected response faithfully.** Do not rewrite, translate, summarize, or enhance the content. If the original was in Chinese, keep Chinese. If English, keep English.
-- **Terminal mode:** Convert markdown to clean plain text first. Write to temp file, display via `cat` in new terminal, then delete the temp file immediately after display.
+- **CRITICAL: Write the selected response VERBATIM.** Do not rewrite, translate, summarize, convert, or enhance the content in any way. Copy it character-for-character. Markdown stripping is done by sed, NOT by the LLM.
+- **Terminal mode:** Write raw content to temp file, strip markdown with sed, display via `cat` in new terminal, then delete the temp file immediately after display.
 - **Browser mode:** Convert markdown to HTML. Use the minimal template above. No sidebar, no collapsible sections, no JavaScript.
 - Always detect the current terminal before opening — do not hardcode a specific terminal.
 - If terminal detection fails, use the OS default fallback.
