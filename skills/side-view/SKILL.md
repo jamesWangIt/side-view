@@ -24,7 +24,7 @@ to view, then display it in a new window.
 Before anything else, always clean up previous temp files from both modes:
 
 ```bash
-rm -f /tmp/claude-view-*.html /tmp/.claude_side_view.txt 2>/dev/null
+rm -f /tmp/claude-view-*.html /tmp/.claude_side_view.txt 2>/dev/null || true
 ```
 
 ## Step 1: Select content

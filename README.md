@@ -108,6 +108,26 @@ Opens the selected response as a styled HTML page in your default browser. Recom
 
 - Claude Code CLI
 
+## Recommended Permissions
+
+To avoid repeated confirmation prompts, add these to your `~/.claude/settings.json`:
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Bash(echo $TERM_PROGRAM)",
+      "Bash(osascript*)",
+      "Bash(rm -f /tmp/claude-view-*)",
+      "Bash(open /tmp/claude-view-*)",
+      "Bash(xdg-open /tmp/claude-view-*)",
+      "Write(/tmp/.claude_side_view*)",
+      "Write(/tmp/claude-view-*)"
+    ]
+  }
+}
+```
+
 ## License
 
 MIT
