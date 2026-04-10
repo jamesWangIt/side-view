@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.2 (2026-04-10)
+
+- Added recommended permissions config to README
+- Fixed cleanup command exit code error on first run
+
 ## 1.0.1 (2026-04-10)
 
 - Added browser mode (`/side-view html`) for rich HTML rendering
