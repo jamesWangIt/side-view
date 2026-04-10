@@ -1,0 +1,17 @@
+{
+  "name": "side-view",
+  "owner": {
+    "name": "James Wang"
+  },
+  "metadata": {
+    "description": "Display Claude responses in a separate window for side-by-side reading"
+  },
+  "plugins": [
+    {
+      "name": "side-view",
+      "version": "1.0.1",
+      "source": "./",
+      "description": "Display Claude responses in a separate window for side-by-side reading"
+    }
+  ]
+}
