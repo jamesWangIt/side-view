@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "side-view",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "source": "./",
       "description": "Display Claude responses in a separate window for side-by-side reading"
     }
